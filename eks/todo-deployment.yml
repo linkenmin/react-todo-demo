@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: react-todo-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: react-todo
+  template:
+    metadata:
+      labels:
+        app: react-todo
+    spec:
+      containers:
+        - name: react-todo-container
+          image: linkenmin/react-todo-demo:latest
+          ports:
+            - containerPort: 80
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 80
+            initialDelaySeconds: 3
+            periodSeconds: 5
